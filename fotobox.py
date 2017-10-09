@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(4, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # Pin 4 als Eingang
 
-# GPIO Outputs einstellen 
+# GPIO Outputs einstellen
 gpio_outputs = [16, 12, 20, 21, 23, 25, 24, 18]
 for pin in gpio_outputs:
     GPIO.setup(pin, GPIO.OUT)
@@ -47,27 +47,20 @@ camera.resolution = (3280, 2464)
 camera.hflip = True
 camera.vflip = True
 
-zaehler = 0
+zaehler = 1
 while True:
     zeit = time.strftime("%y-%m-%d_%H-%M-%S")
     if GPIO.input(4) == GPIO.HIGH:
-        print("5")
         zahl(fuenf, 1)
-        print("4")
         zahl(vier, 1)
-        print("3")
-        zahl(drei, 1)
         for i in range(1, 5):
-            print("2")
+            zahl(drei, 1)
             zahl(zwei, 1)
-            print("1")
             zahl(eins, 1)
             zahl_an(null)
-            camera.capture("media/%s_%d.jpg" %(zeit, i))
             GPIO.output(18, GPIO.HIGH)
-            time.sleep(0.1)
+            camera.capture("media/%s_%d.jpg" %(zeit, i))
             GPIO.output(18, GPIO.LOW)
             zahl_aus(null)
-            print("Bild %d aufgenommen!" %i)
-            time.sleep(1)
+            print("%d Bild %d aufgenommen!" %(zaehler, i))
         zaehler += 1
