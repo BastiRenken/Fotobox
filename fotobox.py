@@ -5,11 +5,15 @@ import os
 import time
 import RPi.GPIO as GPIO
 
+# Ausgabe aktivieren/deaktivieren
+ausgabe = 0
+
 # GPIO-Einstellungen
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(4, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # Pin 4 als Eingang
+GPIO.setwarnings(False)
 
-# GPIO Outputs einstellen
+# GPIO Out- und Inputs einstellen
+GPIO.setup(4, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # Pin 4 als Eingang
 gpio_outputs = [16, 12, 20, 21, 23, 25, 24, 18]
 for pin in gpio_outputs:
     GPIO.setup(pin, GPIO.OUT)
@@ -62,5 +66,6 @@ while True:
             camera.capture("media/%s_%d.jpg" %(zeit, i))
             GPIO.output(18, GPIO.LOW)
             zahl_aus(null)
-            print("%d Bild %d aufgenommen!" %(zaehler, i))
+            if ausgabe == 1:
+                print("Serie %d Bild %d %s" %(zaehler, i, zeit))
         zaehler += 1
