@@ -14,7 +14,7 @@ GPIO.setwarnings(False)
 
 # GPIO Out- und Inputs einstellen
 GPIO.setup(4, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # Pin 4 als Eingang
-gpio_outputs = [16, 12, 20, 21, 23, 25, 24]
+gpio_outputs = [16, 12, 20, 21, 23, 25, 24, 5]
 for pin in gpio_outputs:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.LOW)
@@ -48,15 +48,21 @@ def zahl_aus(ziffer):
         GPIO.output(pin, GPIO.LOW)
 
 # Kameraeinstellungen
-camera = picamera.PiCamera()
-camera.resolution = (3280, 2464)
-camera.hflip = True
-camera.vflip = True
+#camera = picamera.PiCamera()
+#camera.resolution = (3280, 2464)
+#camera.hflip = True
+#camera.vflip = True
 
+os.system("nohup raspistill -v -t 0 --fullscreen > /dev/null 2>&1 &")
 zaehler = 1
 while True:
     zeit = time.strftime("%y-%m-%d_%H-%M-%S")
     if GPIO.input(4) == GPIO.HIGH:
+        os.system("sudo pkill raspistill")
+        camera = picamera.PiCamera()
+        #camera.resolution = (3280, 2464)
+        #camera.hflip = True
+        #camera.vflip = True
         GPIO.output(18, GPIO.LOW)
         zahl(fuenf, 1)
         zahl(vier, 1)
@@ -65,9 +71,13 @@ while True:
             zahl(zwei, 1)
             zahl(eins, 1)
             zahl_an(null)
+            GPIO.output(5, GPIO.HIGH)
             camera.capture("media/%s_%d.jpg" %(zeit, i))
+            GPIO.output(5, GPIO.LOW)
             zahl_aus(null)
             if ausgabe == 1:
                 print("Serie %d Bild %d %s" %(zaehler, i, zeit))
         GPIO.output(18, GPIO.HIGH)
         zaehler += 1
+        camera.close()
+        os.system("nohup raspistill -v -t 0 --fullscreen > /dev/null 2>&1 &")
