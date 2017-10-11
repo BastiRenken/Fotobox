@@ -50,8 +50,8 @@ def zahl_aus(ziffer):
 os.system("nohup raspistill -v -t 0 --fullscreen > /dev/null 2>&1 &")
 zaehler = 1
 while True:
-    zeit = time.strftime("%y-%m-%d_%H-%M-%S")
     if GPIO.input(4) == GPIO.HIGH:
+        zeit = time.strftime("%y-%m-%d_%H-%M-%S")
         GPIO.output(18, GPIO.LOW)
         zahl(fuenf, 1)
         zahl(vier, 1)
