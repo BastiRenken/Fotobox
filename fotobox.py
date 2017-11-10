@@ -64,7 +64,7 @@ while True:
             camera = picamera.PiCamera()
             camera.resolution = (3280, 2464)
             GPIO.output(5, GPIO.HIGH)
-            camera.capture("media/%s_%d.jpg" %(zeit, i))
+            camera.capture("/home/pi/Desktop/Fotobox/media/%s_%d.jpg" %(zeit, i))
             GPIO.output(5, GPIO.LOW)
             camera.close()
             os.system("nohup raspistill -v -t 0 --fullscreen > /dev/null 2>&1 &")
