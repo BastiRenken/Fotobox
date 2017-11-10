@@ -47,12 +47,13 @@ def zahl_aus(ziffer):
     for pin in ziffer:
         GPIO.output(pin, GPIO.LOW)
 
-os.system("nohup raspistill -v -t 0 --fullscreen > /dev/null 2>&1 &")
+livestream = "nohup raspistill -v -hf --fullscreen -t 0 > /dev/null 2>&1 &"
+
+os.system(livestream)
 zaehler = 1
 while True:
     if GPIO.input(4) == GPIO.HIGH:
         zeit = time.strftime("%y-%m-%d_%H-%M-%S")
-        GPIO.output(18, GPIO.LOW)
         zahl(fuenf, 1)
         zahl(vier, 1)
         for i in range(1, 5):
@@ -63,13 +64,12 @@ while True:
             os.system("sudo pkill raspistill")
             camera = picamera.PiCamera()
             camera.resolution = (3280, 2464)
-            GPIO.output(5, GPIO.HIGH)
+            GPIO.output(18, GPIO.LOW)
             camera.capture("/home/pi/Desktop/Fotobox/media/%s_%d.jpg" %(zeit, i))
-            GPIO.output(5, GPIO.LOW)
+            GPIO.output(18, GPIO.HIGH)
             camera.close()
-            os.system("nohup raspistill -v -t 0 --fullscreen > /dev/null 2>&1 &")
+            os.system(livestream)
             zahl_aus(null)
             if ausgabe == 1:
                 print("Serie %d Bild %d %s" %(zaehler, i, zeit))
-        GPIO.output(18, GPIO.HIGH)
         zaehler += 1
