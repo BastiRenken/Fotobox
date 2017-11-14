@@ -14,7 +14,8 @@ GPIO.setwarnings(False)
 
 # GPIO Out- und Inputs einstellen
 GPIO.setup(4, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # Pin 4 als Eingang
-gpio_outputs = [16, 12, 20, 21, 23, 25, 24, 5]
+GPIO.setup(5, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # Pin 5 als Eingang
+gpio_outputs = [16, 12, 20, 21, 23, 25, 24]
 for pin in gpio_outputs:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.LOW)
@@ -52,6 +53,7 @@ livestream = "nohup raspistill -v -hf --fullscreen -t 0 > /dev/null 2>&1 &"
 os.system(livestream)
 zaehler = 1
 while True:
+    sperre = 0
     if GPIO.input(4) == GPIO.HIGH:
         zeit = time.strftime("%y-%m-%d_%H-%M-%S")
         zahl(fuenf, 1)
@@ -73,3 +75,13 @@ while True:
             if ausgabe == 1:
                 print("Serie %d Bild %d %s" %(zaehler, i, zeit))
         zaehler += 1
+    elif GPIO.input(5) == GPIO.HIGH:
+        os.system("sudo pkill raspistill")
+        time.sleep(1)
+        while sperre == 0:
+            if GPIO.input(5) == GPIO.HIGH:
+                os.system(livestream)
+                time.sleep(1)
+                sperre = 1
+            elif GPIO.input(4) == GPIO.HIGH:
+                os.system("sudo shutdown 0")
