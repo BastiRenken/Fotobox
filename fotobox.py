@@ -58,8 +58,8 @@ while True:
         zeit = time.strftime("%y-%m-%d_%H-%M-%S")
         zahl(fuenf, 1)
         zahl(vier, 1)
-        for i in range(1, 5):
-            zahl(drei, 1)
+        zahl(drei, 1)
+        for i in range(1, 4):
             zahl(zwei, 1)
             zahl(eins, 1)
             zahl_an(null)
