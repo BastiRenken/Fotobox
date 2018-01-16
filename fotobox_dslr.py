@@ -63,25 +63,20 @@ while True:
             zahl(zwei, 1)
             zahl(eins, 1)
             zahl_an(null)
-            os.system("sudo pkill raspistill") #Bild ausblenden
-            camera = picamera.PiCamera()
-            camera.resolution = (3280, 2464)
-            GPIO.output(18, GPIO.LOW) #Fotolicht an
-            camera.capture("/home/pi/Desktop/Fotobox/media/%s_%d.jpg" %(zeit, i)) #Bild aufnehmen
-            GPIO.output(18, GPIO.HIGH) #Fotolicht aus
-            camera.close()
-            os.system(livestream) #Bild einblenden
+            #GPIO.output(18, GPIO.LOW)
+            os.system("gphoto2 --capture-image-and-download --filename \"/home/pi/Desktop/Fotbox/dslr/%s_%d.jpg\"" %(zeit, i))
+            #GPIO.output(18, GPIO.HIGH)
             zahl_aus(null)
             if ausgabe == 1:
-                print("Serie %d Bild %d %s" %(zaehler, i, zeit)) #Terminalausgabe
+                print("Serie %d Bild %d %s" %(zaehler, i, zeit))
         zaehler += 1
     elif GPIO.input(5) == GPIO.HIGH:
-        os.system("sudo pkill raspistill") #Bild ausblenden
+        os.system("sudo pkill raspistill")
         time.sleep(1)
         while sperre == 0:
             if GPIO.input(5) == GPIO.HIGH:
                 os.system(livestream)
                 time.sleep(1)
                 sperre = 1
-            elif GPIO.input(4) == GPIO.HIGH: #System herunterfahren
+            elif GPIO.input(4) == GPIO.HIGH:
                 os.system("sudo shutdown 0")
