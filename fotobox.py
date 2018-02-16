@@ -51,6 +51,7 @@ def zahl_aus(ziffer):
 livestream = "nohup raspistill -v -hf --fullscreen -t 0 > /dev/null 2>&1 &"
 
 os.system(livestream)
+os.system("/opt/vc/bin/tvservice -p")
 zaehler = 1
 while True:
     sperre = 0
